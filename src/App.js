@@ -1,36 +1,37 @@
-
-import './App.css';
+import React, { useState } from 'react'
+import Filter from './components/Filter/Filter'
+import MovieList from './components/MovieList/MovieList'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Component } from 'react';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import Child from './components/Player';
+import {movies} from './data'
+import Addmovie from './components/Addmovie/Addmovie';
 
-class App extends Component {
-  
- state={ 
-    Person : { fullName:"yosra",bio:"commercial", imgSrc:'', profession:"dev"},
-    Boolean:false,
-    count:0
-  }
-  componentDidMount(){
-    setInterval(() => {
-      this.setState({count:this.state.count+1})
-    }, 1000);
-   }
+function App() {
    
-  render(){
-    console.log(this.state.Boolean);
-    return (
-     <div className='app'> 
-    {this.state.Boolean ?  <Child  state={this.state}  />: null}
-     <p>{this.state.count}</p>
-     <button  onClick={()=>this.setState({Boolean:!this.state.Boolean})}   >toggle</button>
-  </div>
+  const [datamovies, setmovies] = useState(movies)
 
- ) }
+  function filter(title){
+    setmovies(datamovies.filter(el=>el.title.toLowerCase().includes(title.toLowerCase())))
+  }
+  function filterrating(rating){
+    setmovies(datamovies.filter(el=>el.rating>=rating))
+  }
+ function addmovie(data){
+ console.log(data);
+  setmovies([...datamovies,data])
 }
 
+  return (
+    <div>
+      <Filter  filter={filter}  filterrating={filterrating} />
+     <MovieList   data={datamovies}  />
+     <Addmovie  addmovie={addmovie}  />
+
+    </div>
+  )
+}
+
+export default App
 
 
-export default App;
+
+
